@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  web_server_friends:
+    restart: always
+    stdin_open: true
+    tty: true
+    build: .
+    command: "python ./manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - my-postgres_friends
+
+  my-postgres_friends:
+    image: postgres:14
+    ports:
+      - "5434:5434"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_USER=user
+      - POSTGRES_DB=db
+
+volumes:
+  postgres_data:
